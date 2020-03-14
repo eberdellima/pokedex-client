@@ -1,11 +1,14 @@
 import React from 'react';
 import './App.css';
+import PokemonView from './components/pokemon-view';
 
 function App() {
   return (
-    <div>
+    <div className="content">
       <h1>PokeDex</h1>
-      <div className="poke-container"></div>
+      <div className="poke-container">
+        <PokemonView/>
+      </div>
     </div>
   );
 }

@@ -5,6 +5,10 @@
 	box-sizing: border-box;
 }
 
+#root {
+  width: 100%;
+}
+
 body {
 	background: #EFEFBB;
 	background: -webkit-linear-gradient(to right, #D4D3DD, #EFEFBB);
@@ -18,8 +22,9 @@ body {
 	margin: 0;
 }
 
-h1 {
-	letter-spacing: 3px;
+.content h1 {
+  letter-spacing: 3px;
+  text-align: center;
 }
 
 .poke-container {
@@ -66,5 +71,6 @@ h1 {
 
 .pokemon .name {
 	margin: 15px 0 7px;
-	letter-spacing: 1px;
+  letter-spacing: 1px;
+  text-transform: capitalize;
 }
