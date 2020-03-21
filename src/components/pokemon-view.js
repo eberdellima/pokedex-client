@@ -6,7 +6,7 @@ import { colors } from '../configs/index'
 
 const PokemonView = () => {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(18);
+  const limit = 18;
 
   const fn =  ({error, loading, data}) => {
     if (error) return `Error ${error}`
@@ -40,9 +40,26 @@ const PokemonView = () => {
     return ids
   }
 
+  const handlePageChange = (value) => {
+    const newPage = value < 1 ? 1 : value;
+    setPage(newPage);
+  }
+
+  const Pagination = () => {
+    return (
+      <div className="poke-container">
+        <button onClick={() => handlePageChange(page - 1)}>Prev</button>
+        <button onClick={() => handlePageChange(page + 1)}>Next</button>
+      </div>
+    )
+  }
+
   return (
-    <div className="poke-container">
-      { generatePokemonList().map(id => makeQueryCall(id)) }
+    <div style={{display:'flex', flexDirection: 'column'}}>
+      <Pagination/>
+      <div className="poke-container">
+        { generatePokemonList().map(id => makeQueryCall(id)) }
+      </div>
     </div>
   )
 }

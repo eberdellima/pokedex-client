@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="content">
       <h1>PokeDex</h1>
-      <div className="poke-container">
+      <div>
         <PokemonView/>
       </div>
     </div>
