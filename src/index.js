@@ -9,7 +9,11 @@ import { ApolloProvider } from 'react-apollo';
 import { API_URL } from './configs/index';
 
 const client = new ApolloClient({
-  uri: API_URL
+  uri: API_URL,
+  onError: ({ networkError, graphQLErrors }) => {
+    console.log('graphQLErrors', graphQLErrors)
+    console.log('networkError', networkError)
+  }
 })
 
 ReactDOM.render(

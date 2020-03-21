@@ -2,43 +2,65 @@ import React, { useState } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import { colors } from '../configs/index'
+
 const PokemonView = () => {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(18);
 
-  return (
-    <Query query={gql`{
-      pokemons(
-      skip: ${limit * page - limit}
-      first: ${limit}
-      orderBy: order_ASC
-      ){
+  const fn =  ({error, loading, data}) => {
+    if (error) return `Error ${error}`
+    if (loading) return "Loading"
+    const pokemon = data.pokemonById
+    return <PokemonCard key={pokemon.order} data={pokemon}/>
+  }
+
+  const makeQueryCall = (pokemonId) => {
+    return(<Query query={gql`{
+      pokemonById(id: ${pokemonId}){
         name,
-        url
+        order,
+        types {
+          type { name }
+        }
       }
     }`
     }>
-      {({error, loading, data}) => {
-        if (error) return "Error"
-        if (loading) return "Loading"
-        return data.pokemons.map((pokemon, index) => <PokemonCard key={index} data={pokemon}/>)
-      }}
-    </Query>
+      { fn }
+    </Query>)
+  }
+
+  const generatePokemonList = () => {
+    const ids = []
+    const start = limit * page -limit + 1;
+    const end = page * limit;
+    for (let i = start; i <= end; i++) {
+      ids.push(i);
+    }
+    return ids
+  }
+
+  return (
+    <div className="poke-container">
+      { generatePokemonList().map(id => makeQueryCall(id)) }
+    </div>
   )
 }
 
 const PokemonCard = (props) => {
-  const id = props.data.url.split('/')[6];
+  const id = props.data.order
   const name = props.data.name;
+  const type = props.data.types[0]["type"]["name"];
+  const color = colors[type];
   return (
-    <div className="pokemon">
+    <div className="pokemon" style={{backgroundColor: color}}>
       <div className="img-container">
         <img src={`https://pokeres.bastionbot.org/images/pokemon/${id}.png`} alt={name} />
       </div>
       <div className="info">
         <span className="number">#{id.toString().padStart(3, '0')}</span>
         <h3 className="name">{name}</h3>
-        {/* <small class="type">Type: <span>${type}</span></small> */}
+        <small className="type">Type: <span>{type}</span></small>
       </div>
     </div>
   )
